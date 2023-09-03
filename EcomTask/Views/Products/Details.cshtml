@@ -1,0 +1,93 @@
+﻿@model EcomTask.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="container">
+    @{
+        var id = @Model.Id;
+    }
+        <button onclick="getReviews(@id)" class="btn btn-primary">Get Reviews</button>
+    
+    <div id="reviews">
+        
+
+        
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+        function getReviews(id) {
+            $.ajax({
+                url: "/api/reviews/ProductReviews/" + id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    var tbl = '<table class="table table-light"><tr><th>Rating</th><th>Comment</th></tr>';
+                    $.each(data, function (index, review) {
+                        tbl += `<tr><td>${review.rating}</td><td>${review.comment}</td></tr>`;
+                    });
+                    tbl += '</table>';
+                    $('#reviews').html(tbl);
+                },
+                error: function (error) {
+                    console.error('Error fetching reviews:', error);
+                }
+            });
+        }
+              // function getReviews(id) {
+        //     fetch("/api/reviews/ProductReviews/" + id)
+        //         .then((response) => {
+        //             if (response.ok) {
+        //                 var data = response.json().then((response) => { response });
+        //                 var tbl = '<table class="table table-light" ><tr><th>Rating < /th>< th > Comment < /th> /tr>';
+        //                 data.forEach((x) => {
+        //                     tbl = tbl + '<tr><td>' + x.Rating + '</td><td>' + x.Comment + '</td></tr>';
+        //                 });
+        //                 tbl = tbl + '</table>';
+        //                 document.getElementById("reviews").innerHTML = tbl;
+        //             }
+        //             else {
+        //                 throw new Error(response.statusText);
+        //             }
+        //         });
+        // }
+</script>
+
+  
+
+
+
